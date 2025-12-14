@@ -540,6 +540,59 @@
             .card {
                 width: 100%;
             }
+
+            /* Hide desktop graphs on mobile */
+            .desktop-viz {
+                display: none !important;
+            }
+
+            /* Show mobile gallery */
+            .mobile-gallery {
+                display: block !important;
+            }
+        }
+
+        /* Mobile Gallery */
+        .mobile-gallery {
+            display: none;
+            padding: 20px 15px;
+        }
+
+        .mobile-gallery h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-white);
+        }
+
+        .mobile-graphs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .mobile-graph-item {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-graph-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .mobile-graph-label {
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-align: center;
+        }
+
+        .desktop-viz {
+            display: block;
         }
     </style>
 </head>
@@ -597,14 +650,46 @@
         </div>
     </section>
 
-    <!-- Click Hint -->
-    <div
+    <!-- Click Hint (Desktop only) -->
+    <div class="desktop-viz"
         style="text-align: center; padding: 12px; background: rgba(255,255,255,0.03); color: #8b949e; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
         💡 Click any graph to expand • Click again to close
     </div>
 
-    <!-- ML Algorithms Banner -->
-    <div class="banner" style="background: linear-gradient(90deg, rgba(88, 166, 255, 0.1), rgba(163, 113, 247, 0.1));">
+    <!-- Mobile Gallery (Phone only) -->
+    <section class="mobile-gallery">
+        <h2>📊 Key Insights</h2>
+        <div class="mobile-graphs">
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/01_stats.png" alt="Dataset Overview">
+                <div class="mobile-graph-label">Dataset Overview</div>
+            </div>
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/02_brands.png" alt="Top Brands">
+                <div class="mobile-graph-label">Top Brands</div>
+            </div>
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/03_price.png" alt="Price Ranges">
+                <div class="mobile-graph-label">Price Distribution</div>
+            </div>
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/04_ml.png" alt="ML Model">
+                <div class="mobile-graph-label">ML Model</div>
+            </div>
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/05_specs.png" alt="Popular Specs">
+                <div class="mobile-graph-label">Popular Specs</div>
+            </div>
+            <div class="mobile-graph-item">
+                <img src="graphs_mobile/06_insights.png" alt="Key Insights">
+                <div class="mobile-graph-label">Key Takeaways</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ML Algorithms Banner (Desktop only) -->
+    <div class="banner desktop-viz"
+        style="background: linear-gradient(90deg, rgba(88, 166, 255, 0.1), rgba(163, 113, 247, 0.1));">
         <h3 style="color: var(--accent-blue);">3 Analysis Techniques Applied</h3>
         <div class="card-row">
             <div class="card">
@@ -622,8 +707,8 @@
         </div>
     </div>
 
-    <!-- Market Analysis -->
-    <section class="section">
+    <!-- Market Analysis (Desktop only) -->
+    <section class="section desktop-viz">
         <div class="section-header">
             <h2 style="color: var(--accent-blue);">What Drives Laptop Prices?</h2>
             <p>i7 processors command $118 premium over i5. Acer leads premium segment.</p>
@@ -644,7 +729,7 @@
     </section>
 
     <!-- Market Segmentation -->
-    <section class="section">
+    <section class="section desktop-viz">
         <div class="section-header">
             <h2 style="color: var(--accent-purple);">Market Segmentation</h2>
             <p>K-Means clustering identifies 4 distinct market segments</p>
@@ -665,7 +750,7 @@
     </section>
 
     <!-- Anomaly Detection -->
-    <section class="section">
+    <section class="section desktop-viz">
         <div class="section-header">
             <h2 style="color: var(--accent-orange);">Value Anomaly Detection</h2>
             <p>Isolation Forest finds overpriced and undervalued deals</p>
@@ -686,7 +771,7 @@
     </section>
 
     <!-- Advanced Visualizations -->
-    <section class="section">
+    <section class="section desktop-viz">
         <div class="section-header">
             <h2>Advanced Market Analytics</h2>
             <p>Brand positioning, spec analysis, and value scoring</p>
