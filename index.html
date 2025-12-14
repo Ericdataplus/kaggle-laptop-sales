@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Laptop Sales Analysis | Data Dashboard</title>
-    <meta name="description" content="Interactive data analysis of 4,400+ laptops sold on Amazon. Explore price trends, brand comparisons, and find the best value deals.">
-    
+    <meta name="description"
+        content="Interactive data analysis of 4,400+ laptops sold on Amazon. Explore price trends, brand comparisons, and find the best value deals.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --bg-primary: #0d1117;
@@ -22,7 +25,7 @@
             --text-primary: #f0f6fc;
             --text-secondary: #8b949e;
             --border-color: #30363d;
-            --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -56,7 +59,7 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 20%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(163, 113, 247, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 70% 80%, rgba(163, 113, 247, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -192,8 +195,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-title {
@@ -280,12 +290,29 @@
             height: 100%;
         }
 
-        .insight-card:nth-child(1)::before { background: var(--accent-blue); }
-        .insight-card:nth-child(2)::before { background: var(--accent-green); }
-        .insight-card:nth-child(3)::before { background: var(--accent-purple); }
-        .insight-card:nth-child(4)::before { background: var(--accent-orange); }
-        .insight-card:nth-child(5)::before { background: var(--accent-red); }
-        .insight-card:nth-child(6)::before { background: var(--accent-blue); }
+        .insight-card:nth-child(1)::before {
+            background: var(--accent-blue);
+        }
+
+        .insight-card:nth-child(2)::before {
+            background: var(--accent-green);
+        }
+
+        .insight-card:nth-child(3)::before {
+            background: var(--accent-purple);
+        }
+
+        .insight-card:nth-child(4)::before {
+            background: var(--accent-orange);
+        }
+
+        .insight-card:nth-child(5)::before {
+            background: var(--accent-red);
+        }
+
+        .insight-card:nth-child(6)::before {
+            background: var(--accent-blue);
+        }
 
         .insight-number {
             font-size: 3rem;
@@ -369,6 +396,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Hero Section -->
     <section class="hero">
@@ -378,29 +406,53 @@
                 <span>Data Analysis Portfolio Project</span>
             </div>
             <h1>Amazon Laptop Sales Analysis</h1>
-            <p>Deep dive into 4,400+ laptop listings. Discover pricing trends, brand comparisons, and hidden value deals using data science.</p>
+            <p>Deep dive into 4,400+ laptop listings. Discover pricing trends, brand comparisons, and hidden value deals
+                using data science.</p>
         </div>
     </section>
 
     <!-- Stats Grid -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-icon">📦</div>
+            <div class="stat-icon" style="color: #58a6ff;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+            </div>
             <div class="stat-value">4,447</div>
             <div class="stat-label">Laptops Analyzed</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">🏢</div>
+            <div class="stat-icon" style="color: #a371f7;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </div>
             <div class="stat-value">34</div>
             <div class="stat-label">Brands</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">💰</div>
+            <div class="stat-icon" style="color: #56d364;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+            </div>
             <div class="stat-value">$992</div>
             <div class="stat-label">Median Price</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">📈</div>
+            <div class="stat-icon" style="color: #f0883e;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                    <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+            </div>
             <div class="stat-value">$87M+</div>
             <div class="stat-label">Total Revenue</div>
         </div>
@@ -426,7 +478,8 @@
                     <img src="graphs/10_summary_dashboard.png" alt="Summary Dashboard">
                     <div class="viz-card-content">
                         <h3>Summary Dashboard</h3>
-                        <p>Complete overview of the Amazon laptop market including brand distribution, pricing, and key metrics.</p>
+                        <p>Complete overview of the Amazon laptop market including brand distribution, pricing, and key
+                            metrics.</p>
                     </div>
                 </div>
                 <div class="viz-card">
@@ -468,7 +521,8 @@
                     <img src="graphs/09a_brand_positioning.png" alt="Brand Positioning">
                     <div class="viz-card-content">
                         <h3>🗺️ Brand Positioning Map</h3>
-                        <p>Strategic view of brands by price vs rating. Bubble size indicates total revenue. Find high-value vs premium vs budget segments.</p>
+                        <p>Strategic view of brands by price vs rating. Bubble size indicates total revenue. Find
+                            high-value vs premium vs budget segments.</p>
                     </div>
                 </div>
             </div>
@@ -517,7 +571,8 @@
                     <img src="graphs/09d_value_analysis.png" alt="Value Analysis">
                     <div class="viz-card-content">
                         <h3>💎 Value Score Analysis</h3>
-                        <p>Machine learning-based analysis revealing the best deals. Green dots = high value (great specs for price), Red = low value (overpriced). Circled items are the top 5 hidden gems.</p>
+                        <p>Machine learning-based analysis revealing the best deals. Green dots = high value (great
+                            specs for price), Red = low value (overpriced). Circled items are the top 5 hidden gems.</p>
                     </div>
                 </div>
                 <div class="viz-card">
@@ -579,7 +634,8 @@
                 <div class="insight-card">
                     <span class="insight-number">01</span>
                     <h4>🎯 Best Value: Dell Leads</h4>
-                    <p>Dell laptops offer the best specs-to-price ratio, making them the top choice for value-conscious buyers.</p>
+                    <p>Dell laptops offer the best specs-to-price ratio, making them the top choice for value-conscious
+                        buyers.</p>
                 </div>
                 <div class="insight-card">
                     <span class="insight-number">02</span>
@@ -604,7 +660,8 @@
                 <div class="insight-card">
                     <span class="insight-number">06</span>
                     <h4>⭐ Rating vs Price: No Correlation</h4>
-                    <p>Higher prices don't guarantee better ratings. Customer satisfaction isn't tied to spending more.</p>
+                    <p>Higher prices don't guarantee better ratings. Customer satisfaction isn't tied to spending more.
+                    </p>
                 </div>
             </div>
         </section>
@@ -615,7 +672,8 @@
         <p>Built with Python, Pandas, Matplotlib & ❤️</p>
         <div class="source-badge">
             <span>📊</span>
-            <span>Data Source: <a href="https://www.kaggle.com/datasets/kamali2727/laptop-sales-by-amazon" target="_blank">Kaggle - Amazon Laptop Sales</a></span>
+            <span>Data Source: <a href="https://www.kaggle.com/datasets/kamali2727/laptop-sales-by-amazon"
+                    target="_blank">Kaggle - Amazon Laptop Sales</a></span>
         </div>
         <p style="margin-top: 20px; color: var(--text-secondary);">
             Created by <a href="https://github.com/Ericdataplus" target="_blank">Ericdataplus</a> | December 2024
@@ -628,7 +686,7 @@
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             // Remove active from all tabs
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            
+
             // Show selected section
             document.getElementById(sectionId).classList.add('active');
             // Mark tab as active
@@ -636,4 +694,5 @@
         }
     </script>
 </body>
+
 </html>
