@@ -4,28 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Laptop Sales Analysis | Data Dashboard</title>
+    <title>Amazon Laptop Sales | ML-Powered Analysis</title>
     <meta name="description"
-        content="Interactive data analysis of 4,400+ laptops sold on Amazon. Explore price trends, brand comparisons, and find the best value deals.">
+        content="Machine learning analysis of 4,400+ laptops: Price prediction, market segmentation, anomaly detection">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <style>
         :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
+            --bg-dark: #0d1117;
+            --bg-card: #12121a;
             --accent-blue: #58a6ff;
             --accent-green: #56d364;
             --accent-purple: #a371f7;
             --accent-orange: #f0883e;
-            --accent-red: #f85149;
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
-            --border-color: #30363d;
-            --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --accent-gold: #ffd700;
+            --text-white: #ffffff;
+            --text-gray: #8b949e;
         }
 
         * {
@@ -35,326 +32,269 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-white);
+            overflow-x: hidden;
         }
 
-        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #1a1f35 0%, #0d1117 50%, #0a1628 100%);
-            padding: 80px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            padding: 40px 20px;
+            background:
+                radial-gradient(circle at 30% 30%, rgba(88, 166, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(163, 113, 247, 0.15) 0%, transparent 40%),
+                var(--bg-dark);
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(163, 113, 247, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
+        .hero-badge {
+            display: inline-flex;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.05));
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, #58a6ff 50%, #a371f7 100%);
+            background: linear-gradient(135deg, #fff 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 30px;
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-tertiary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--accent-blue);
-            border: 1px solid var(--border-color);
+        .hero-subtitle strong {
+            color: var(--accent-gold);
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: -60px auto 40px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--card-shadow);
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-blue);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Navigation Tabs */
-        .tabs {
+        .ml-highlights {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 20px;
             justify-content: center;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            margin-bottom: 40px;
         }
 
-        .tab {
-            padding: 12px 24px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s;
+        .ml-chip {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.9rem;
         }
 
-        .tab:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+        .ml-chip strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 2px;
         }
 
-        .tab.active {
-            background: var(--accent-blue);
-            color: #fff;
+        .stats-row {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        /* Section Styles */
-        .section {
-            display: none;
-            animation: fadeIn 0.4s ease;
+        .stat-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .section.active {
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
             display: block;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            50% {
+                transform: translateX(-50%) translateY(10px);
             }
         }
 
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 24px;
+        .scroll-hint svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--text-gray);
+        }
+
+        .section {
+            padding: 80px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: var(--text-gray);
+            font-size: 1rem;
+        }
+
+        .viz-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+        }
+
+        @media (max-width: 500px) {
+            .viz-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .viz-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .viz-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .viz-item.featured {
+            grid-column: 1 / -1;
+        }
+
+        .viz-item img {
+            width: 100%;
+            display: block;
+        }
+
+        .viz-caption {
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        /* Visualization Grid */
-        .viz-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 24px;
+        .viz-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 600px) {
-            .viz-grid {
-                grid-template-columns: 1fr;
-            }
+        .viz-caption h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
-        .viz-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+        .viz-caption p {
+            font-size: 0.8rem;
+            color: var(--text-gray);
         }
 
-        .viz-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--card-shadow);
+        .banner {
+            padding: 50px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .viz-card.full-width {
-            grid-column: 1 / -1;
+        .banner h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
         }
 
-        .viz-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .viz-card-content {
-            padding: 20px;
-        }
-
-        .viz-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .viz-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Insights Section */
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .card-row {
+            display: flex;
+            justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .insight-card {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
+        .card {
+            background: var(--bg-card);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 180px;
+            text-align: center;
         }
 
-        .insight-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
+        .card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
         }
 
-        .insight-card:nth-child(1)::before {
-            background: var(--accent-blue);
+        .card p {
+            color: var(--text-gray);
+            font-size: 0.8rem;
         }
 
-        .insight-card:nth-child(2)::before {
-            background: var(--accent-green);
-        }
-
-        .insight-card:nth-child(3)::before {
-            background: var(--accent-purple);
-        }
-
-        .insight-card:nth-child(4)::before {
-            background: var(--accent-orange);
-        }
-
-        .insight-card:nth-child(5)::before {
-            background: var(--accent-red);
-        }
-
-        .insight-card:nth-child(6)::before {
-            background: var(--accent-blue);
-        }
-
-        .insight-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent-blue);
-            opacity: 0.3;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .insight-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .insight-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* GIF Section */
-        .gif-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-        }
-
-        @media (max-width: 500px) {
-            .gif-showcase {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Footer */
         footer {
             text-align: center;
             padding: 60px 20px;
-            background: var(--bg-secondary);
-            margin-top: 60px;
-            border-top: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        footer h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
         }
 
         footer a {
@@ -366,333 +306,312 @@
             text-decoration: underline;
         }
 
-        .source-badge {
-            display: inline-flex;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            display: flex;
             align-items: center;
             gap: 8px;
-            background: var(--bg-tertiary);
-            padding: 12px 24px;
+            color: var(--text-gray);
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            font-size: 0.9rem;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-white);
+            text-decoration: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-badge">
-                <span>📊</span>
-                <span>Data Analysis Portfolio Project</span>
+            <div class="hero-badge">ML-Powered Market Analysis</div>
+            <h1>Amazon Laptop<br>Sales Intelligence</h1>
+            <p class="hero-subtitle">
+                <strong>3 ML algorithms</strong> applied to <strong>4,400+ laptops</strong>.
+                Price prediction, market segmentation, and value anomaly detection.
+            </p>
+
+            <div class="ml-highlights">
+                <div class="ml-chip">
+                    <strong style="color: var(--accent-blue);">$617</strong>
+                    <span style="color: var(--text-gray);">Prediction MAE</span>
+                </div>
+                <div class="ml-chip">
+                    <strong style="color: var(--accent-purple);">4</strong>
+                    <span style="color: var(--text-gray);">Market Segments</span>
+                </div>
+                <div class="ml-chip">
+                    <strong style="color: var(--accent-orange);">16</strong>
+                    <span style="color: var(--text-gray);">Visualizations</span>
+                </div>
             </div>
-            <h1>Amazon Laptop Sales Analysis</h1>
-            <p>Deep dive into 4,400+ laptop listings. Discover pricing trends, brand comparisons, and hidden value deals
-                using data science.</p>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-number" style="color: var(--accent-blue);">4.4K</span>
+                    <span class="stat-label">Laptops</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" style="color: var(--accent-green);">$1,147</span>
+                    <span class="stat-label">Avg Price</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" style="color: var(--accent-purple);">3</span>
+                    <span class="stat-label">ML Algorithms</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" style="color: var(--accent-orange);">35+</span>
+                    <span class="stat-label">Brands</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
         </div>
     </section>
 
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon" style="color: #58a6ff;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                    </path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
+    <!-- ML Algorithms Banner -->
+    <div class="banner" style="background: linear-gradient(90deg, rgba(88, 166, 255, 0.1), rgba(163, 113, 247, 0.1));">
+        <h3 style="color: var(--accent-blue);">3 Machine Learning Algorithms Applied</h3>
+        <div class="card-row">
+            <div class="card">
+                <h4 style="color: var(--accent-blue);">Gradient Boosting</h4>
+                <p>Price Prediction</p>
             </div>
-            <div class="stat-value">4,447</div>
-            <div class="stat-label">Laptops Analyzed</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="color: #a371f7;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+            <div class="card">
+                <h4 style="color: var(--accent-purple);">K-Means</h4>
+                <p>Market Segmentation</p>
             </div>
-            <div class="stat-value">34</div>
-            <div class="stat-label">Brands</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="color: #56d364;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
+            <div class="card">
+                <h4 style="color: var(--accent-orange);">Isolation Forest</h4>
+                <p>Value Anomalies</p>
             </div>
-            <div class="stat-value">$992</div>
-            <div class="stat-label">Median Price</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="color: #f0883e;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                    <polyline points="17 6 23 6 23 12"></polyline>
-                </svg>
-            </div>
-            <div class="stat-value">$87M+</div>
-            <div class="stat-label">Total Revenue</div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Navigation -->
-        <div class="tabs">
-            <button class="tab active" onclick="showSection('overview')">📊 Overview</button>
-            <button class="tab" onclick="showSection('brands')">🏢 Brands</button>
-            <button class="tab" onclick="showSection('specs')">⚙️ Specs</button>
-            <button class="tab" onclick="showSection('advanced')">🔬 Deep Analysis</button>
-            <button class="tab" onclick="showSection('animations')">🎬 Animations</button>
-            <button class="tab" onclick="showSection('insights')">💡 Key Insights</button>
+    <!-- Price Prediction -->
+    <section class="section">
+        <div class="section-header">
+            <h2 style="color: var(--accent-blue);">Price Prediction Model</h2>
+            <p>Gradient Boosting regression with feature importance</p>
         </div>
-
-        <!-- Overview Section -->
-        <section id="overview" class="section active">
-            <h2 class="section-title">📊 Market Overview</h2>
-            <div class="viz-grid">
-                <div class="viz-card full-width">
-                    <img src="graphs/10_summary_dashboard.png" alt="Summary Dashboard">
-                    <div class="viz-card-content">
-                        <h3>Summary Dashboard</h3>
-                        <p>Complete overview of the Amazon laptop market including brand distribution, pricing, and key
-                            metrics.</p>
+        <div class="viz-showcase">
+            <div class="viz-item featured">
+                <img src="graphs/11_price_prediction.png" alt="Price Prediction">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">ML
+                    </div>
+                    <div>
+                        <h3>Random Forest vs Gradient Boosting</h3>
+                        <p>Brand and RAM are top predictors</p>
                     </div>
                 </div>
-                <div class="viz-card">
-                    <img src="graphs/02_price_analysis.png" alt="Price Analysis">
-                    <div class="viz-card-content">
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Segmentation -->
+    <section class="section">
+        <div class="section-header">
+            <h2 style="color: var(--accent-purple);">Market Segmentation</h2>
+            <p>K-Means clustering identifies 4 distinct market segments</p>
+        </div>
+        <div class="viz-showcase">
+            <div class="viz-item featured">
+                <img src="graphs/12_market_segmentation.png" alt="Market Segmentation">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">K
+                    </div>
+                    <div>
+                        <h3>Budget | Entry | Professional | Premium</h3>
+                        <p>PCA visualization with elbow method</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anomaly Detection -->
+    <section class="section">
+        <div class="section-header">
+            <h2 style="color: var(--accent-orange);">Value Anomaly Detection</h2>
+            <p>Isolation Forest finds overpriced and undervalued deals</p>
+        </div>
+        <div class="viz-showcase">
+            <div class="viz-item featured">
+                <img src="graphs/13_value_anomalies.png" alt="Anomaly Detection">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(240, 136, 62, 0.2); color: var(--accent-orange);">!
+                    </div>
+                    <div>
+                        <h3>Overpriced vs Undervalued Laptops</h3>
+                        <p>Find the hidden deals and avoid overpaying</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Visualizations -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Advanced Market Analytics</h2>
+            <p>Brand positioning, spec analysis, and value scoring</p>
+        </div>
+        <div class="viz-showcase">
+            <div class="viz-item">
+                <img src="graphs/09a_brand_positioning.png" alt="Brand Positioning">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">B
+                    </div>
+                    <div>
+                        <h3>Brand Positioning Map</h3>
+                        <p>Price vs popularity matrix</p>
+                    </div>
+                </div>
+            </div>
+            <div class="viz-item">
+                <img src="graphs/09c_market_segments.png" alt="Market Segments">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">S
+                    </div>
+                    <div>
+                        <h3>Market Segments</h3>
+                        <p>Budget to Premium breakdown</p>
+                    </div>
+                </div>
+            </div>
+            <div class="viz-item">
+                <img src="graphs/09d_value_analysis.png" alt="Value Analysis">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(86, 211, 100, 0.2); color: var(--accent-green);">V
+                    </div>
+                    <div>
+                        <h3>Value Score Analysis</h3>
+                        <p>Best value laptops identified</p>
+                    </div>
+                </div>
+            </div>
+            <div class="viz-item">
+                <img src="graphs/09b_spec_heatmap.png" alt="Spec Heatmap">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(240, 136, 62, 0.2); color: var(--accent-orange);">H
+                    </div>
+                    <div>
+                        <h3>Spec Heatmap</h3>
+                        <p>Feature correlation matrix</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDA Section -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Exploratory Analysis</h2>
+            <p>Brand, price, and spec distributions</p>
+        </div>
+        <div class="viz-showcase">
+            <div class="viz-item">
+                <img src="graphs/01_brand_distribution.png" alt="Brand Distribution">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">B
+                    </div>
+                    <div>
+                        <h3>Brand Distribution</h3>
+                        <p>HP and Dell dominate the market</p>
+                    </div>
+                </div>
+            </div>
+            <div class="viz-item">
+                <img src="graphs/02_price_analysis.png" alt="Price Analysis">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(86, 211, 100, 0.2); color: var(--accent-green);">$
+                    </div>
+                    <div>
                         <h3>Price Distribution</h3>
-                        <p>Most laptops cluster between $400-$1,500 with a median of $992.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/04_os_analysis.png" alt="OS Analysis">
-                    <div class="viz-card-content">
-                        <h3>Operating System Market Share</h3>
-                        <p>Windows 11 dominates, followed by Windows 10 and Chrome OS.</p>
+                        <p>Most laptops $500-$1,500</p>
                     </div>
                 </div>
             </div>
-        </section>
+            <div class="viz-item">
+                <img src="graphs/03_ram_analysis.png" alt="RAM Analysis">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">R
+                    </div>
+                    <div>
+                        <h3>RAM Analysis</h3>
+                        <p>8GB and 16GB most common</p>
+                    </div>
+                </div>
+            </div>
+            <div class="viz-item">
+                <img src="graphs/04_os_analysis.png" alt="OS Analysis">
+                <div class="viz-caption">
+                    <div class="viz-icon" style="background: rgba(240, 136, 62, 0.2); color: var(--accent-orange);">O
+                    </div>
+                    <div>
+                        <h3>OS Market Share</h3>
+                        <p>Windows dominates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Brands Section -->
-        <section id="brands" class="section">
-            <h2 class="section-title">🏢 Brand Analysis</h2>
-            <div class="viz-grid">
-                <div class="viz-card">
-                    <img src="graphs/01_brand_distribution.png" alt="Brand Distribution">
-                    <div class="viz-card-content">
-                        <h3>Top 10 Brands by Listings</h3>
-                        <p>Dell, HP, and ASUS lead the market with the most product listings.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/07_top_sellers.png" alt="Top Sellers">
-                    <div class="viz-card-content">
-                        <h3>Top Revenue Generators</h3>
-                        <p>Which laptops and brands generate the most sales revenue.</p>
-                    </div>
-                </div>
-                <div class="viz-card full-width">
-                    <img src="graphs/09a_brand_positioning.png" alt="Brand Positioning">
-                    <div class="viz-card-content">
-                        <h3>🗺️ Brand Positioning Map</h3>
-                        <p>Strategic view of brands by price vs rating. Bubble size indicates total revenue. Find
-                            high-value vs premium vs budget segments.</p>
-                    </div>
-                </div>
+    <!-- Summary -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Complete Summary</h2>
+            <p>All insights at a glance</p>
+        </div>
+        <div class="viz-showcase">
+            <div class="viz-item featured">
+                <img src="graphs/10_summary_dashboard.png" alt="Summary">
             </div>
-        </section>
-
-        <!-- Specs Section -->
-        <section id="specs" class="section">
-            <h2 class="section-title">⚙️ Specifications Analysis</h2>
-            <div class="viz-grid">
-                <div class="viz-card">
-                    <img src="graphs/03_ram_analysis.png" alt="RAM Analysis">
-                    <div class="viz-card-content">
-                        <h3>RAM Distribution & Pricing</h3>
-                        <p>16GB is the sweet spot. More RAM correlates with higher prices.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/05_screen_size_analysis.png" alt="Screen Size">
-                    <div class="viz-card-content">
-                        <h3>Screen Size Trends</h3>
-                        <p>15.6" remains the most popular, with 14" gaining ground.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/06_graphics_analysis.png" alt="Graphics Analysis">
-                    <div class="viz-card-content">
-                        <h3>Graphics Card Analysis</h3>
-                        <p>Dedicated GPUs command 40%+ price premium over integrated.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/08_rating_analysis.png" alt="Rating Analysis">
-                    <div class="viz-card-content">
-                        <h3>Customer Ratings</h3>
-                        <p>Average rating of 4.2 stars. Some lesser-known brands outperform giants.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Advanced Section -->
-        <section id="advanced" class="section">
-            <h2 class="section-title">🔬 Deep Analysis</h2>
-            <div class="viz-grid">
-                <div class="viz-card full-width">
-                    <img src="graphs/09d_value_analysis.png" alt="Value Analysis">
-                    <div class="viz-card-content">
-                        <h3>💎 Value Score Analysis</h3>
-                        <p>Machine learning-based analysis revealing the best deals. Green dots = high value (great
-                            specs for price), Red = low value (overpriced). Circled items are the top 5 hidden gems.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/09b_spec_heatmap.png" alt="Spec Heatmap">
-                    <div class="viz-card-content">
-                        <h3>📊 Price-RAM Heatmap</h3>
-                        <p>Finding the sweet spot: which price-RAM combinations get the best ratings.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="graphs/09c_market_segments.png" alt="Market Segments">
-                    <div class="viz-card-content">
-                        <h3>📦 Market Segmentation</h3>
-                        <p>Breaking down the market into Gaming, Business, Budget, and Standard segments.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Animations Section -->
-        <section id="animations" class="section">
-            <h2 class="section-title">🎬 Animated Insights</h2>
-            <div class="gif-showcase">
-                <div class="viz-card">
-                    <img src="gifs/01_brand_race.gif" alt="Brand Race">
-                    <div class="viz-card-content">
-                        <h3>🏆 Brand Revenue Race</h3>
-                        <p>Watch brands compete for revenue dominance.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="gifs/03_stats_counter.gif" alt="Stats Counter">
-                    <div class="viz-card-content">
-                        <h3>📊 Key Metrics</h3>
-                        <p>Animated overview of the dataset's key statistics.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="gifs/02_price_scatter.gif" alt="Price Scatter">
-                    <div class="viz-card-content">
-                        <h3>💻 Market Visualization</h3>
-                        <p>Every laptop plotted: Price vs Rating, colored by RAM.</p>
-                    </div>
-                </div>
-                <div class="viz-card">
-                    <img src="gifs/04_segment_pie.gif" alt="Segment Pie">
-                    <div class="viz-card-content">
-                        <h3>📊 Market Segments</h3>
-                        <p>How the market breaks down by use case.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Insights Section -->
-        <section id="insights" class="section">
-            <h2 class="section-title">💡 Key Findings</h2>
-            <div class="insights-grid">
-                <div class="insight-card">
-                    <span class="insight-number">01</span>
-                    <h4>🎯 Best Value: Dell Leads</h4>
-                    <p>Dell laptops offer the best specs-to-price ratio, making them the top choice for value-conscious
-                        buyers.</p>
-                </div>
-                <div class="insight-card">
-                    <span class="insight-number">02</span>
-                    <h4>💰 The $992 Sweet Spot</h4>
-                    <p>The median laptop price is $992, with most sales concentrated in the $600-$1,500 range.</p>
-                </div>
-                <div class="insight-card">
-                    <span class="insight-number">03</span>
-                    <h4>🎮 Gaming Premium: +40%</h4>
-                    <p>Laptops with dedicated GPUs cost 40% more on average than integrated graphics models.</p>
-                </div>
-                <div class="insight-card">
-                    <span class="insight-number">04</span>
-                    <h4>📊 35% Standard Segment</h4>
-                    <p>The "Standard" segment (non-gaming, non-budget) makes up 35% of all listings.</p>
-                </div>
-                <div class="insight-card">
-                    <span class="insight-number">05</span>
-                    <h4>🔍 680 Hidden Deals Found</h4>
-                    <p>Our ML analysis identified 680 laptops priced 30%+ below their expected value based on specs.</p>
-                </div>
-                <div class="insight-card">
-                    <span class="insight-number">06</span>
-                    <h4>⭐ Rating vs Price: No Correlation</h4>
-                    <p>Higher prices don't guarantee better ratings. Customer satisfaction isn't tied to spending more.
-                    </p>
-                </div>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-        <p>Built with Python, Pandas, Matplotlib & ❤️</p>
-        <div class="source-badge">
-            <span>📊</span>
-            <span>Data Source: <a href="https://www.kaggle.com/datasets/kamali2727/laptop-sales-by-amazon"
-                    target="_blank">Kaggle - Amazon Laptop Sales</a></span>
+        <h3>ML-Powered Market Analysis</h3>
+        <p style="color: var(--text-gray);">3 algorithms | 16 visualizations | 4,400+ laptops</p>
+
+        <div class="footer-links">
+            <a href="https://github.com/Ericdataplus/kaggle-laptop-sales" class="footer-link" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                View Code
+            </a>
+            <a href="https://www.kaggle.com/datasets/kamilali25/laptop-sales-by-amazon" class="footer-link"
+                target="_blank">Kaggle Dataset</a>
+            <a href="https://github.com/Ericdataplus" class="footer-link" target="_blank">Ericdataplus</a>
         </div>
-        <p style="margin-top: 20px; color: var(--text-secondary);">
-            Created by <a href="https://github.com/Ericdataplus" target="_blank">Ericdataplus</a> | December 2024
+
+        <p style="margin-top: 25px; color: var(--text-gray); font-size: 0.8rem;">
+            Python | Scikit-learn | Pandas | Matplotlib | December 2024
         </p>
     </footer>
-
-    <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            // Remove active from all tabs
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            // Mark tab as active
-            event.target.classList.add('active');
-        }
-    </script>
 </body>
 
 </html>
