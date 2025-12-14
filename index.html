@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Laptop Sales Analysis | Data Dashboard</title>
+    <meta name="description" content="Interactive data analysis of 4,400+ laptops sold on Amazon. Explore price trends, brand comparisons, and find the best value deals.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --accent-blue: #58a6ff;
+            --accent-green: #56d364;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a1f35 0%, #0d1117 50%, #0a1628 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(163, 113, 247, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #58a6ff 50%, #a371f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: -60px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Visualization Grid */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .viz-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .viz-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .viz-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .viz-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .viz-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .viz-card-content {
+            padding: 20px;
+        }
+
+        .viz-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .viz-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .insight-card:nth-child(1)::before { background: var(--accent-blue); }
+        .insight-card:nth-child(2)::before { background: var(--accent-green); }
+        .insight-card:nth-child(3)::before { background: var(--accent-purple); }
+        .insight-card:nth-child(4)::before { background: var(--accent-orange); }
+        .insight-card:nth-child(5)::before { background: var(--accent-red); }
+        .insight-card:nth-child(6)::before { background: var(--accent-blue); }
+
+        .insight-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            opacity: 0.3;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .insight-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .insight-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* GIF Section */
+        .gif-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width: 500px) {
+            .gif-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-secondary);
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .source-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>📊</span>
+                <span>Data Analysis Portfolio Project</span>
+            </div>
+            <h1>Amazon Laptop Sales Analysis</h1>
+            <p>Deep dive into 4,400+ laptop listings. Discover pricing trends, brand comparisons, and hidden value deals using data science.</p>
+        </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-value">4,447</div>
+            <div class="stat-label">Laptops Analyzed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <div class="stat-value">34</div>
+            <div class="stat-label">Brands</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">$992</div>
+            <div class="stat-label">Median Price</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value">$87M+</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Navigation -->
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('overview')">📊 Overview</button>
+            <button class="tab" onclick="showSection('brands')">🏢 Brands</button>
+            <button class="tab" onclick="showSection('specs')">⚙️ Specs</button>
+            <button class="tab" onclick="showSection('advanced')">🔬 Deep Analysis</button>
+            <button class="tab" onclick="showSection('animations')">🎬 Animations</button>
+            <button class="tab" onclick="showSection('insights')">💡 Key Insights</button>
+        </div>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <h2 class="section-title">📊 Market Overview</h2>
+            <div class="viz-grid">
+                <div class="viz-card full-width">
+                    <img src="graphs/10_summary_dashboard.png" alt="Summary Dashboard">
+                    <div class="viz-card-content">
+                        <h3>Summary Dashboard</h3>
+                        <p>Complete overview of the Amazon laptop market including brand distribution, pricing, and key metrics.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/02_price_analysis.png" alt="Price Analysis">
+                    <div class="viz-card-content">
+                        <h3>Price Distribution</h3>
+                        <p>Most laptops cluster between $400-$1,500 with a median of $992.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/04_os_analysis.png" alt="OS Analysis">
+                    <div class="viz-card-content">
+                        <h3>Operating System Market Share</h3>
+                        <p>Windows 11 dominates, followed by Windows 10 and Chrome OS.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brands Section -->
+        <section id="brands" class="section">
+            <h2 class="section-title">🏢 Brand Analysis</h2>
+            <div class="viz-grid">
+                <div class="viz-card">
+                    <img src="graphs/01_brand_distribution.png" alt="Brand Distribution">
+                    <div class="viz-card-content">
+                        <h3>Top 10 Brands by Listings</h3>
+                        <p>Dell, HP, and ASUS lead the market with the most product listings.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/07_top_sellers.png" alt="Top Sellers">
+                    <div class="viz-card-content">
+                        <h3>Top Revenue Generators</h3>
+                        <p>Which laptops and brands generate the most sales revenue.</p>
+                    </div>
+                </div>
+                <div class="viz-card full-width">
+                    <img src="graphs/09a_brand_positioning.png" alt="Brand Positioning">
+                    <div class="viz-card-content">
+                        <h3>🗺️ Brand Positioning Map</h3>
+                        <p>Strategic view of brands by price vs rating. Bubble size indicates total revenue. Find high-value vs premium vs budget segments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specs Section -->
+        <section id="specs" class="section">
+            <h2 class="section-title">⚙️ Specifications Analysis</h2>
+            <div class="viz-grid">
+                <div class="viz-card">
+                    <img src="graphs/03_ram_analysis.png" alt="RAM Analysis">
+                    <div class="viz-card-content">
+                        <h3>RAM Distribution & Pricing</h3>
+                        <p>16GB is the sweet spot. More RAM correlates with higher prices.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/05_screen_size_analysis.png" alt="Screen Size">
+                    <div class="viz-card-content">
+                        <h3>Screen Size Trends</h3>
+                        <p>15.6" remains the most popular, with 14" gaining ground.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/06_graphics_analysis.png" alt="Graphics Analysis">
+                    <div class="viz-card-content">
+                        <h3>Graphics Card Analysis</h3>
+                        <p>Dedicated GPUs command 40%+ price premium over integrated.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/08_rating_analysis.png" alt="Rating Analysis">
+                    <div class="viz-card-content">
+                        <h3>Customer Ratings</h3>
+                        <p>Average rating of 4.2 stars. Some lesser-known brands outperform giants.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Section -->
+        <section id="advanced" class="section">
+            <h2 class="section-title">🔬 Deep Analysis</h2>
+            <div class="viz-grid">
+                <div class="viz-card full-width">
+                    <img src="graphs/09d_value_analysis.png" alt="Value Analysis">
+                    <div class="viz-card-content">
+                        <h3>💎 Value Score Analysis</h3>
+                        <p>Machine learning-based analysis revealing the best deals. Green dots = high value (great specs for price), Red = low value (overpriced). Circled items are the top 5 hidden gems.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/09b_spec_heatmap.png" alt="Spec Heatmap">
+                    <div class="viz-card-content">
+                        <h3>📊 Price-RAM Heatmap</h3>
+                        <p>Finding the sweet spot: which price-RAM combinations get the best ratings.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="graphs/09c_market_segments.png" alt="Market Segments">
+                    <div class="viz-card-content">
+                        <h3>📦 Market Segmentation</h3>
+                        <p>Breaking down the market into Gaming, Business, Budget, and Standard segments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animations Section -->
+        <section id="animations" class="section">
+            <h2 class="section-title">🎬 Animated Insights</h2>
+            <div class="gif-showcase">
+                <div class="viz-card">
+                    <img src="gifs/01_brand_race.gif" alt="Brand Race">
+                    <div class="viz-card-content">
+                        <h3>🏆 Brand Revenue Race</h3>
+                        <p>Watch brands compete for revenue dominance.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="gifs/03_stats_counter.gif" alt="Stats Counter">
+                    <div class="viz-card-content">
+                        <h3>📊 Key Metrics</h3>
+                        <p>Animated overview of the dataset's key statistics.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="gifs/02_price_scatter.gif" alt="Price Scatter">
+                    <div class="viz-card-content">
+                        <h3>💻 Market Visualization</h3>
+                        <p>Every laptop plotted: Price vs Rating, colored by RAM.</p>
+                    </div>
+                </div>
+                <div class="viz-card">
+                    <img src="gifs/04_segment_pie.gif" alt="Segment Pie">
+                    <div class="viz-card-content">
+                        <h3>📊 Market Segments</h3>
+                        <p>How the market breaks down by use case.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section id="insights" class="section">
+            <h2 class="section-title">💡 Key Findings</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <span class="insight-number">01</span>
+                    <h4>🎯 Best Value: Dell Leads</h4>
+                    <p>Dell laptops offer the best specs-to-price ratio, making them the top choice for value-conscious buyers.</p>
+                </div>
+                <div class="insight-card">
+                    <span class="insight-number">02</span>
+                    <h4>💰 The $992 Sweet Spot</h4>
+                    <p>The median laptop price is $992, with most sales concentrated in the $600-$1,500 range.</p>
+                </div>
+                <div class="insight-card">
+                    <span class="insight-number">03</span>
+                    <h4>🎮 Gaming Premium: +40%</h4>
+                    <p>Laptops with dedicated GPUs cost 40% more on average than integrated graphics models.</p>
+                </div>
+                <div class="insight-card">
+                    <span class="insight-number">04</span>
+                    <h4>📊 35% Standard Segment</h4>
+                    <p>The "Standard" segment (non-gaming, non-budget) makes up 35% of all listings.</p>
+                </div>
+                <div class="insight-card">
+                    <span class="insight-number">05</span>
+                    <h4>🔍 680 Hidden Deals Found</h4>
+                    <p>Our ML analysis identified 680 laptops priced 30%+ below their expected value based on specs.</p>
+                </div>
+                <div class="insight-card">
+                    <span class="insight-number">06</span>
+                    <h4>⭐ Rating vs Price: No Correlation</h4>
+                    <p>Higher prices don't guarantee better ratings. Customer satisfaction isn't tied to spending more.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Built with Python, Pandas, Matplotlib & ❤️</p>
+        <div class="source-badge">
+            <span>📊</span>
+            <span>Data Source: <a href="https://www.kaggle.com/datasets/kamali2727/laptop-sales-by-amazon" target="_blank">Kaggle - Amazon Laptop Sales</a></span>
+        </div>
+        <p style="margin-top: 20px; color: var(--text-secondary);">
+            Created by <a href="https://github.com/Ericdataplus" target="_blank">Ericdataplus</a> | December 2024
+        </p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            // Mark tab as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

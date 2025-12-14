@@ -1,0 +1,15 @@
+# Ignore virtual environment (use shared venv in parent)
+venv/
+__pycache__/
+*.pyc
+
+# Kaggle cache
+.kaggle/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

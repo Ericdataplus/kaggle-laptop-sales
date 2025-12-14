@@ -1,0 +1,33 @@
+AMAZON LAPTOP SALES - DEEP ANALYSIS INSIGHTS
+============================================================
+
+KEY FINDINGS:
+
+1. VALUE ANALYSIS
+   - Best value brand: Dell
+   - Average value laptop costs: $992
+
+2. MARKET SEGMENTS
+   - Standard: 767 laptops (35.4%)
+   - Mid-Range: 570 laptops (26.3%)
+   - Budget: 304 laptops (14.0%)
+   - Gaming Budget: 221 laptops (10.2%)
+   - Gaming/Workstation: 216 laptops (10.0%)
+   - Business Premium: 90 laptops (4.2%)
+
+3. BRAND INSIGHTS
+   - Total brands analyzed: 34
+   - Top revenue brand: HP
+   - Highest rated brand (20+ listings): ROKC
+
+4. PRICING INSIGHTS
+   - Median laptop price: $992
+   - Price range: $111 - $5,599
+   - Overpriced listings detected: 319
+   - Deal listings detected: 680
+
+5. SALES DRIVERS
+   - Rating: +0.024 correlation with sales
+   - Screen Size: +0.012 correlation with sales
+   - Price: -0.004 correlation with sales
+   - RAM: -0.001 correlation with sales
