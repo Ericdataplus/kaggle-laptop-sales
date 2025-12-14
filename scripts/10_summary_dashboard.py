@@ -31,7 +31,7 @@ fig = plt.figure(figsize=(20, 12))
 fig.patch.set_facecolor('#1a1a2e')
 
 # Title
-fig.suptitle('💻 Amazon Laptop Sales - Dashboard', fontsize=28, fontweight='bold', 
+fig.suptitle('Amazon Laptop Sales - Dashboard', fontsize=28, fontweight='bold', 
              color='white', y=0.98)
 
 # Create grid
@@ -39,24 +39,30 @@ gs = fig.add_gridspec(3, 4, hspace=0.35, wspace=0.3,
                       left=0.05, right=0.95, top=0.90, bottom=0.05)
 
 # ===== ROW 1: Key Stats =====
-# Stat boxes
+# Stat boxes with colors instead of emojis
 stats = [
-    ('Total Laptops', f'{len(df):,}', '📦'),
-    ('Brands', f'{df["brand"].nunique()}', '🏢'),
-    ('Avg Price', f'${df_valid["price_clean"].mean():,.0f}', '💰'),
-    ('Total Revenue', f'${df["total_sales_clean"].sum()/1e6:,.1f}M', '📈'),
+    ('Total Laptops', f'{len(df):,}', '#58a6ff'),
+    ('Brands', f'{df["brand"].nunique()}', '#a371f7'),
+    ('Avg Price', f'${df_valid["price_clean"].mean():,.0f}', '#56d364'),
+    ('Total Revenue', f'${df["total_sales_clean"].sum()/1e6:,.1f}M', '#f0883e'),
 ]
 
-for i, (label, value, emoji) in enumerate(stats):
+for i, (label, value, color) in enumerate(stats):
     ax = fig.add_subplot(gs[0, i])
     ax.set_facecolor('#2a2a4e')
-    ax.text(0.5, 0.65, emoji, fontsize=40, ha='center', va='center', transform=ax.transAxes)
+    
+    # Draw a colored circle/icon at top
+    circle = plt.Circle((0.5, 0.7), 0.15, color=color, transform=ax.transAxes)
+    ax.add_patch(circle)
+    
     ax.text(0.5, 0.35, value, fontsize=24, fontweight='bold', ha='center', va='center', 
-            transform=ax.transAxes, color='#00d4ff')
+            transform=ax.transAxes, color=color)
     ax.text(0.5, 0.12, label, fontsize=12, ha='center', va='center', 
             transform=ax.transAxes, color='#888')
     ax.set_xticks([])
     ax.set_yticks([])
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
     for spine in ax.spines.values():
         spine.set_color('#444')
         spine.set_linewidth(2)
